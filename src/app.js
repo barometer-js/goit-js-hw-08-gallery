@@ -64,14 +64,20 @@ const galleryItems = [
   },
 ];
 
-//Создание и рендер разметки по массиву данных
 
 const paletteContainer = document.querySelector('.js-gallery');
 const cardsMarkup = createGalleryCardsMarkup(galleryItems);
+const lightbox = document.querySelector('.js-lightbox')
+
+const closeButton = document.querySelector('[data-action="close-lightbox"]');
+
+const ligthboxImage = document.querySelector('.lightbox__image')
 
 paletteContainer.insertAdjacentHTML('beforeend', cardsMarkup);
 
-console.log(createGalleryCardsMarkup(galleryItems));
+closeButton.addEventListener('click', onCloseModal);
+//Создание и рендер разметки по массиву данных
+// console.log(createGalleryCardsMarkup(galleryItems));
 
 function createGalleryCardsMarkup(items) {
   return items.map(({ preview, original, description }) => {
@@ -94,12 +100,37 @@ function createGalleryCardsMarkup(items) {
 };
 
 
-//Реализация делегирования на галерее `ul.js-gallery` и получение `url` большого изображения
-
+//Реализация делегирования на галерее `ul.js-gallery`
 //Открытие модального окна по клику на элементе галереи
+//Получение `url` большого изображения
+
+paletteContainer.addEventListener('click', onCardClick);
+
+function onCardClick(evt) {
+  evt.preventDefault();
+
+  if (!evt.target.classList.contains('gallery__image')) {
+    return;
+  }
+  lightbox.classList.add('is-open');
+
+  ligthImageAttributs(evt.target.dataset.source, evt.target.alt);
+}
+console.log(paletteContainer);
 
 //Подмена значения атрибута `src` элемента `img.lightbox__image`
+function ligthImageAttributs(src, alt) {
+  ligthboxImage.setAttribute('src', src)
+  ligthboxImage.setAttribute('alt', alt)
+}
 
-//Закрытие модального окна по клику на кнопку `button[data-action="close-lightbox"]`
+
 
 //Очистка значения атрибута `src` элемента `img.lightbox__image`
+function onCloseModal() {
+  lightbox.classList.remove('is-open');
+  ligthImageAttributs('','')
+}
+
+
+//Закрытие модального окна по клику на кнопку `button[data-action="close-lightbox"]`
